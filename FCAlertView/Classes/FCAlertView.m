@@ -172,7 +172,7 @@
         
         if (_autoHideSeconds == 0) {
             
-            _dismissOnOutsideTouch = YES;
+            //_dismissOnOutsideTouch = YES;
             
             NSLog(@"Forced Dismiss on Outside Touch");
             
@@ -300,6 +300,11 @@
                                         self.frame.size.height/2 - ((alertViewFrame.size.height - 50 + 140)/2),
                                         result.width - defaultSpacing,
                                         alertViewFrame.size.height - 50 + 140);
+        if (_hideDoneButton && _numberOfButtons > 2) // Frames for AlertView with 2 added buttons (vertical buttons)
+            alertViewFrame = CGRectMake(self.frame.size.width/2 - ((result.width - defaultSpacing)/2),
+                                        self.frame.size.height/2 - ((alertViewFrame.size.height - 50 + 140)/2),
+                                        result.width - defaultSpacing,
+                                        alertViewFrame.size.height + (_numberOfButtons-1)*45);
     }
     
     if (alertTextFields.count > 0)
@@ -363,6 +368,7 @@
     // Re-adjusting Frames based on height of text - Requirement is to not have over 6 lines of text
     
     CGSize constraint = CGSizeMake(descriptionLabel.frame.size.width, CGFLOAT_MAX);
+    CGSize sizeOfText;
     
     NSStringDrawingContext *context = [[NSStringDrawingContext alloc] init];
     CGSize boundingBox = [descriptionLabel.text boundingRectWithSize:constraint
@@ -638,7 +644,7 @@
             [alertView addSubview:horizontalSeparator];
         }
         
-    } else if (_numberOfButtons >= 2) { // View  contains TWO OTHER Buttons - First & Second Button
+    } else if (_numberOfButtons == 2) { // View  contains TWO OTHER Buttons - First & Second Button
         
         UIButton *firstButton = [UIButton buttonWithType:UIButtonTypeSystem];
         firstButton.backgroundColor = [UIColor whiteColor];
@@ -811,6 +817,119 @@
             [alertView addSubview:firstSeparator];
             [alertView addSubview:secondSeparator];
         }
+        
+    } else if(_numberOfButtons > 2) {
+        
+        NSInteger yPositionButton = 135;
+        NSInteger heightButton = 45;
+        
+        for (int i = 0; i < _numberOfButtons; i++) {
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+            button.backgroundColor = [UIColor whiteColor];
+            if (_detachButtons)
+                button.backgroundColor = [UIColor colorWithWhite:228.0f/255.0f alpha:1.0];
+            if (_darkTheme)
+                button.backgroundColor = [UIColor colorWithWhite:78.0f/255.0f alpha:1.0];
+            if (self.firstButtonBackgroundColor != nil)
+                button.backgroundColor = self.firstButtonBackgroundColor;
+
+            button.frame = CGRectMake(0,
+                                      alertViewFrame.size.height - yPositionButton,
+                                      alertViewFrame.size.width,
+                                      heightButton);
+            
+            yPositionButton -= heightButton;
+            
+            if (_detachButtons) {
+                button.frame = CGRectMake(button.frame.origin.x + 8,
+                                               button.frame.origin.y - 5,
+                                               button.frame.size.width - 16,
+                                               heightButton-5);
+                button.layer.cornerRadius = MIN(self.cornerRadius, button.frame.size.height/2);
+                button.layer.masksToBounds = YES;
+            }
+            
+            [button setTitle:[[alertButtons objectAtIndex:i] objectForKey:@"title"] forState:UIControlStateNormal];
+            [button addTarget:self action:@selector(handleButton:) forControlEvents:UIControlEventTouchUpInside];
+            [button addTarget:self action:@selector(btnTouched) forControlEvents:UIControlEventTouchDown];
+            [button addTarget:self action:@selector(btnReleased) forControlEvents:UIControlEventTouchDragExit];
+            button.titleLabel.font = [UIFont systemFontOfSize:16.0f weight:UIFontWeightRegular];
+            button.tintColor = self.colorScheme;
+            if (self.colorScheme == nil && _darkTheme)
+                button.tintColor = [UIColor whiteColor];
+            if (self.firstButtonTitleColor != nil)
+                button.tintColor = self.firstButtonTitleColor;
+            
+            button.titleLabel.adjustsFontSizeToFitWidth = YES;
+            button.titleLabel.minimumScaleFactor = 0.8;
+            button.tag = i;
+            
+            if (!_hideAllButtons) {
+                [alertView addSubview:button];
+            }
+            
+            UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(0,
+                                                                              button.frame.origin.y - 2,
+                                                                              alertViewFrame.size.width,
+                                                                              2)];
+            separator.backgroundColor = [UIColor colorWithWhite:100.0f/255.0f alpha:1.0]; // set color as you want.
+            if (_darkTheme)
+                separator.backgroundColor = [UIColor colorWithWhite:58.0f/255.0f alpha:1.0];
+            
+            
+            UIVisualEffect *blurEffect;
+            blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
+            if (_darkTheme)
+                blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+            
+            UIVisualEffectView *visualEffectView;
+            visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+            visualEffectView.frame = separator.bounds;
+            visualEffectView.userInteractionEnabled = NO;
+            [separator addSubview:visualEffectView];
+            
+            if (!_hideAllButtons && !_detachButtons && !_hideSeparatorLineView) {
+                [alertView addSubview:separator];
+                
+            }
+        }
+        
+        UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        if (_colorScheme == nil) {
+            doneButton.backgroundColor = [UIColor whiteColor];
+            if (_detachButtons)
+                doneButton.backgroundColor = [UIColor colorWithWhite:228.0f/255.0f alpha:1.0];
+            if (_darkTheme)
+                doneButton.backgroundColor = [UIColor colorWithWhite:78.0f/255.0f alpha:1.0];
+        } else {
+            doneButton.backgroundColor = _colorScheme;
+        }
+        
+        doneButton.frame = CGRectMake(0,
+                                      alertViewFrame.size.height - 45,
+                                      alertViewFrame.size.width,
+                                      45);
+        if (_detachButtons) {
+            doneButton.frame = CGRectMake(8,
+                                          alertViewFrame.size.height - 50,
+                                          alertViewFrame.size.width - 16,
+                                          40);
+            doneButton.layer.cornerRadius = MIN(self.cornerRadius, doneButton.frame.size.height/2);
+            doneButton.layer.masksToBounds = YES;
+        }
+        
+        [doneButton setTitle:doneTitle forState:UIControlStateNormal];
+        [doneButton addTarget:self action:@selector(donePressed) forControlEvents:UIControlEventTouchUpInside];
+        [doneButton addTarget:self action:@selector(btnTouched) forControlEvents:UIControlEventTouchDown];
+        [doneButton addTarget:self action:@selector(btnReleased) forControlEvents:UIControlEventTouchDragExit];
+        doneButton.titleLabel.font = [UIFont systemFontOfSize:18.0f weight:UIFontWeightMedium];
+        if (_colorScheme != nil || _darkTheme)
+            doneButton.tintColor = [UIColor whiteColor];
+        if (self.doneButtonTitleColor != nil)
+            doneButton.tintColor = self.doneButtonTitleColor;
+        
+        if (!_hideAllButtons && !_hideDoneButton)
+            [alertView addSubview:doneButton];
         
     }
     
@@ -1380,14 +1499,14 @@
 
 - (void)addButton:(NSString *)title withActionBlock:(FCActionBlock)action {
     
-    if (alertButtons.count < 2) {
+    //if (alertButtons.count < 2) {
         if (action != nil)
             [alertButtons addObject:@{@"title" : title,
                                       @"action" : action}];
         else
             [alertButtons addObject:@{@"title" : title,
                                       @"action" : @0}];
-    }
+    //}
     
     _numberOfButtons = alertButtons.count;
     
