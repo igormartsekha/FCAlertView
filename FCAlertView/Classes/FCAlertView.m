@@ -509,6 +509,9 @@
             doneButton.backgroundColor = _colorScheme;
         }
         
+        if(self.doneButtonBackgroundColor != nil)
+            doneButton.backgroundColor = self.doneButtonBackgroundColor;
+        
         doneButton.frame = CGRectMake(0,
                                       alertViewFrame.size.height - 45,
                                       alertViewFrame.size.width,
@@ -527,6 +530,9 @@
         [doneButton addTarget:self action:@selector(btnTouched) forControlEvents:UIControlEventTouchDown];
         [doneButton addTarget:self action:@selector(btnReleased) forControlEvents:UIControlEventTouchDragExit];
         doneButton.titleLabel.font = [UIFont systemFontOfSize:18.0f weight:UIFontWeightMedium];
+        if(self.doneButtonBackgroundColor != nil)
+            doneButton.titleLabel.font = [UIFont systemFontOfSize:18.0f weight:UIFontWeightRegular];
+        
         if (_colorScheme != nil || _darkTheme)
             doneButton.tintColor = [UIColor whiteColor];
         if (self.doneButtonTitleColor != nil)
@@ -547,6 +553,9 @@
         } else {
             doneButton.backgroundColor = _colorScheme;
         }
+        
+        if(self.doneButtonBackgroundColor != nil)
+            doneButton.backgroundColor = self.doneButtonBackgroundColor;
         
         doneButton.frame = CGRectMake(alertViewFrame.size.width/2,
                                       alertViewFrame.size.height - 45,
@@ -744,6 +753,9 @@
             doneButton.backgroundColor = _colorScheme;
         }
         
+        if(self.doneButtonBackgroundColor != nil)
+            doneButton.backgroundColor = self.doneButtonBackgroundColor;
+        
         doneButton.frame = CGRectMake(0,
                                       alertViewFrame.size.height - 45,
                                       alertViewFrame.size.width,
@@ -762,6 +774,9 @@
         [doneButton addTarget:self action:@selector(btnTouched) forControlEvents:UIControlEventTouchDown];
         [doneButton addTarget:self action:@selector(btnReleased) forControlEvents:UIControlEventTouchDragExit];
         doneButton.titleLabel.font = [UIFont systemFontOfSize:18.0f weight:UIFontWeightMedium];
+        if(self.doneButtonBackgroundColor != nil)
+            doneButton.titleLabel.font = [UIFont systemFontOfSize:18.0f weight:UIFontWeightRegular];
+        
         if (_colorScheme != nil || _darkTheme)
             doneButton.tintColor = [UIColor whiteColor];
         if (self.doneButtonTitleColor != nil)
@@ -905,6 +920,9 @@
             doneButton.backgroundColor = _colorScheme;
         }
         
+        if(self.doneButtonBackgroundColor != nil)
+            doneButton.backgroundColor = self.doneButtonBackgroundColor;
+        
         doneButton.frame = CGRectMake(0,
                                       alertViewFrame.size.height - 45,
                                       alertViewFrame.size.width,
@@ -923,6 +941,9 @@
         [doneButton addTarget:self action:@selector(btnTouched) forControlEvents:UIControlEventTouchDown];
         [doneButton addTarget:self action:@selector(btnReleased) forControlEvents:UIControlEventTouchDragExit];
         doneButton.titleLabel.font = [UIFont systemFontOfSize:18.0f weight:UIFontWeightMedium];
+        if(self.doneButtonBackgroundColor != nil)
+            doneButton.titleLabel.font = [UIFont systemFontOfSize:18.0f weight:UIFontWeightRegular];
+        
         if (_colorScheme != nil || _darkTheme)
             doneButton.tintColor = [UIColor whiteColor];
         if (self.doneButtonTitleColor != nil)
