@@ -1245,6 +1245,10 @@
     
 }
 
+-(void) hideKeyboard {
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+}
+
 #pragma  mark - Presenting AlertView
 
 - (void) showAlertInView:(UIViewController *)view withTitle:(NSString *)title withSubtitle:(NSString *)subTitle withCustomImage:(UIImage *)image withDoneButtonTitle:(NSString *)done andButtons:(NSArray *)buttons {
@@ -1260,7 +1264,7 @@
     }
     
     // Adding Alert
-    
+    [self hideKeyboard];
     [self setAlertViewAttributes:title withSubtitle:subTitle withCustomImage:image withDoneButtonTitle:done andButtons:buttons];
     [view.view.window addSubview:self];
     
@@ -1279,7 +1283,7 @@
     }
     
     // Adding Alert
-    
+    [self hideKeyboard];
     [self setAlertViewAttributes:title withSubtitle:subTitle withCustomImage:image withDoneButtonTitle:done andButtons:buttons];
     [window addSubview:self];
     
@@ -1300,7 +1304,7 @@
     }
     
     // Adding Alert
-    
+    [self hideKeyboard];
     [window addSubview:self];
     [window bringSubviewToFront:self];
     
