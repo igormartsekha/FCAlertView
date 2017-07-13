@@ -40,6 +40,9 @@
     UIImage *vectorImage;
     NSString *alertType;
     
+    UIImage *centerImage;
+    NSString *centerImageText;
+    CGSize centerImageSize;
     // Frames
     
     CGRect alertViewFrame;
@@ -51,7 +54,7 @@
     AVAudioPlayer *player;
     
     // Alert Rating Types
-    
+    NSInteger alertTypeCenterImage;
     NSInteger alertTypeRatingHearts;
     NSInteger alertTypeRatingStars;
     
@@ -114,6 +117,7 @@
 typedef void (^FCRatingBlock)(NSInteger rating);
 @property (nonatomic, copy) FCRatingBlock ratingBlock;
 
+- (void) makeAlertTypeCenterImage:(UIImage*) image andText:(NSString*) text;
 - (void) makeAlertTypeRateHearts:(FCRatingBlock)ratingBlock;
 - (void) makeAlertTypeRateStars:(FCRatingBlock)ratingBlock;
 

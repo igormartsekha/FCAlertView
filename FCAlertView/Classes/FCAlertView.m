@@ -318,6 +318,13 @@
                                     result.width - defaultSpacing,
                                     alertViewFrame.size.height);
     
+    if (alertTypeCenterImage) {
+        alertViewFrame = CGRectMake(self.frame.size.width/2 - ((result.width - defaultSpacing)/2),
+                                    self.frame.size.height/2 - ((alertViewFrame.size.height - 50 + centerImageSize.height)/2),
+                                    result.width - defaultSpacing,
+                                    alertViewFrame.size.height + centerImageSize.height);
+    }
+    
     if (alertTypeRatingStars || alertTypeRatingHearts)
         alertViewFrame = CGRectMake(self.frame.size.width/2 - ((result.width - defaultSpacing)/2),
                                     self.frame.size.height/2 - ((alertViewFrame.size.height - 50 + 140)/2),
@@ -337,6 +344,9 @@
     // Description Label
     
     NSInteger descriptionLevel = 45.0f;
+    if(alertTypeCenterImage) {
+        descriptionLevel = 45.0f + centerImageSize.height;
+    }
     
     if (_title == nil || _title.length == 0) {
         
@@ -1133,6 +1143,25 @@
     if (alertTypeRatingHearts || alertTypeRatingStars)
         [alertViewContents addSubview:ratingController];
     
+    // APPLYING CENTER IMAGE
+    if(alertTypeCenterImage) {
+        UIView *imageController = [[UIView alloc] initWithFrame:CGRectMake(20, titleLabel.frame.size.height + centerImage.size.height, alertViewFrame.size.width - 40, centerImageSize.height)];
+        
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(imageController.frame.size.width/2-centerImage.size.width/2, 0, centerImage.size.width, centerImage.size.height)];
+        [imageView setImage:centerImage];
+        
+        UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, centerImage.size.height+2.0f, imageController.frame.size.width, 20.0f)];
+        [textLabel setText:centerImageText];
+        [textLabel setTextAlignment:NSTextAlignmentCenter];
+        [textLabel setFont:[UIFont systemFontOfSize:12.0f weight:UIFontWeightBold]];
+        
+        [imageController addSubview:imageView];
+        [imageController addSubview:textLabel];
+        [alertViewContents addSubview:imageController];
+    }
+    
+    
+    
     // APPLYING SHADOW
     
     [self.layer setShadowColor:[UIColor blackColor].CGColor];
@@ -1214,6 +1243,21 @@
     alertType = @"Progress";
 }
 
+- (void) makeAlertTypeCenterImage:(UIImage*) image andText:(NSString*) text {
+    centerImage = image;
+    centerImageText = text;
+    
+    centerImageSize = CGSizeZero;
+    if(image && text) {
+        centerImageSize = CGSizeMake(image.size.width, image.size.height + 5 + 20.0f + 5);
+    } else if(image) {
+        centerImageSize = CGSizeMake(image.size.width, image.size.height);
+    }
+    
+    alertViewWithVector = 0;
+    alertTypeCenterImage = 1;
+}
+
 - (void) makeAlertTypeRateHearts:(FCRatingBlock)ratingBlock {
     _ratingBlock = ratingBlock;
     vectorImage = [self loadImageFromResourceBundle:@"heart.png"];
@@ -1246,7 +1290,9 @@
 }
 
 -(void) hideKeyboard {
+#ifdef SHARE_EXTENSION
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+#endif
 }
 
 #pragma  mark - Presenting AlertView
@@ -1290,7 +1336,10 @@
 }
 
 - (void) showAlertWithTitle:(NSString *)title withSubtitle:(NSString *)subTitle withCustomImage:(UIImage *)image withDoneButtonTitle:(NSString *)done andButtons:(NSArray *)buttons{
+
+#if UIKIT_DEFINE_AS_PROPERTIES
     
+#else
     [self setAlertViewAttributes:title withSubtitle:subTitle withCustomImage:image withDoneButtonTitle:done andButtons:buttons];
     UIWindow *window = [UIApplication sharedApplication].windows.lastObject;
     
@@ -1307,8 +1356,9 @@
     [self hideKeyboard];
     [window addSubview:self];
     [window bringSubviewToFront:self];
-    
+    #endif
 }
+
 
 - (void)setAlertViewAttributes:(NSString *)title withSubtitle:(NSString *)subTitle withCustomImage:(UIImage *)image withDoneButtonTitle:(NSString *)done andButtons:(NSArray *)buttons{
     
