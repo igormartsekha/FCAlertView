@@ -69,6 +69,7 @@
         _fullCircleCustomImage = NO;
         _hideSeparatorLineView = NO;
         _customImageScale = 1;
+        _descriptionAligment = NSTextAlignmentCenter;
         
         defaultSpacing = [self configureAVWidth];
         defaultHeight = [self configureAVHeight];
@@ -369,7 +370,7 @@
     
     descriptionLabel.textColor = self.subTitleColor;
     descriptionLabel.text = self.subTitle;
-    descriptionLabel.textAlignment = NSTextAlignmentCenter;
+    descriptionLabel.textAlignment = self.descriptionAligment;
     descriptionLabel.adjustsFontSizeToFitWidth = NO;
     
     descriptionLabel.numberOfLines = 0;

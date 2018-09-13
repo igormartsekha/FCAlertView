@@ -106,6 +106,7 @@
 @property BOOL fullCircleCustomImage;
 @property BOOL hideSeparatorLineView;
 @property CGFloat customImageScale;
+@property NSTextAlignment descriptionAligment;
 
 // Default Types of Alerts
 
