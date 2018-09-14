@@ -70,7 +70,8 @@
         _hideSeparatorLineView = NO;
         _customImageScale = 1;
         _descriptionAligment = NSTextAlignmentCenter;
-        
+        _descriptionFontSize = 16.0f;
+
         defaultSpacing = [self configureAVWidth];
         defaultHeight = [self configureAVHeight];
                 
@@ -364,9 +365,9 @@
                                                                           60.0f)];
     
     if (_title != nil)
-        descriptionLabel.font = [UIFont systemFontOfSize:15.0f weight:UIFontWeightLight];
+        descriptionLabel.font = [UIFont systemFontOfSize:self.descriptionFontSize weight:UIFontWeightLight];
     else
-        descriptionLabel.font = [UIFont systemFontOfSize:16.0f weight:UIFontWeightRegular];
+        descriptionLabel.font = [UIFont systemFontOfSize:self.descriptionFontSize weight:UIFontWeightRegular];
     
     descriptionLabel.textColor = self.subTitleColor;
     descriptionLabel.text = self.subTitle;

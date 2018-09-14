@@ -107,6 +107,7 @@
 @property BOOL hideSeparatorLineView;
 @property CGFloat customImageScale;
 @property NSTextAlignment descriptionAligment;
+@property CGFloat descriptionFontSize;
 
 // Default Types of Alerts
 
